@@ -1,5 +1,9 @@
 package phoneList;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -30,11 +34,12 @@ public class PhoneList {
 	 * Instance Variables
 	 */
 	
-	
+	ArrayList<Contact> contacts;
 	
 	//Constructor
 	public PhoneList() {
-		//initialize instance variables
+		
+		contacts = new ArrayList<Contact>();
 	}
 	
 	
@@ -49,9 +54,26 @@ public class PhoneList {
 	 *   - tell the user what the new contact is and that 
 	 *        it's been added
 	 */
+	//addcontact method
 	public void addContact() {
 		
+		//print asking for the contacts name
+		System.out.println("\nAdd Contact:\nWhat's the contact's name?");
+		//create scanner
+		Scanner inKey = new Scanner(System.in); 
+		//get name from scanner
+		String name = inKey.next();
+		//ask for the phone number
+		System.out.println("What's the contact's phone number?");
+		//get the phone number as a string
+		String phoneNumber = inKey.next();
 		
+		//create a new contact
+		Contact contact = new Contact(name, phoneNumber);
+		//add contact to an arraylist
+		contacts.add(contacts.size(), contact);
+		//print the contact was added and the contact info
+		System.out.println("New contact added!\nName: " + name + "\nPhone Number: " + phoneNumber);
 	}
 	
 	
@@ -72,7 +94,40 @@ public class PhoneList {
 	 */
 	public void removeContact() {
 		
+		//new list to remove the contacts frmo the arraylist without the "checkForComodification" error
+		List<Contact> removeFromContacts = new ArrayList<Contact>();
 		
+		//ask for the contacts name
+		System.out.println("\nRemove Contact:\nWhat's the contact's name?");
+		
+		//create a new scanner
+		Scanner inKey = new Scanner(System.in); 
+		//get the inputted name
+		String name = inKey.next();
+		//create a boolean "hasfound" so the loop can stop
+		boolean hasFound = false;
+		//for every contact in the list
+		for (Contact contact : contacts) {
+			//if hasnt found the contact yet
+			if (!hasFound) {
+				//check if the current contacts name is the same as the input 
+				if (contact.getName().equalsIgnoreCase(name)) {
+					//set found to true
+					hasFound = true;
+					//add that contact to the remove list
+					removeFromContacts.add(contact);
+					//print that it removed them
+					System.out.println("Removed contact '" + name + "'!");
+				}
+			}
+		}
+		//remove the contact from the contacts
+		contacts.removeAll(removeFromContacts);
+		//if hasnt found at all
+		if (!hasFound) {
+			//print that it couldnt find the contact
+			System.out.println("Couldn't find a contact with the name " + name + "!");
+		}
 	}
 	
 	
@@ -87,8 +142,29 @@ public class PhoneList {
 	 *          -----------------
 	 *          #################
 	 */
+	//printlist method
 	public void printList() {
-		
+		//create contact list
+		System.out.print("\n       CONTACT LIST\n");
+		//print out a header
+		for (int i = 0; i < 26; i++) { 
+			
+			System.out.print("-");
+		}
+		//create a new line
+		System.out.print("|\n");
+		//for every contact
+		for (Contact contact : contacts) {
+			//print the contacts as a string
+			System.out.println(contact.toString());
+			//print the footer
+			for (int i = 0; i < 26; i++) { 
+				
+				System.out.print("-");
+			}
+			//print new wall
+			System.out.print("|\n");
+		}
 	}
 
 	
@@ -101,10 +177,11 @@ public class PhoneList {
 	 * of how to manage them.
 	 * 
 	 */
+	//menu method
 	public void menu() {
-		
+		//create int input
 		int input = 0;
-		
+		//menu string to send
 		String menu = "-----------------------\n"
 				    + "     Contacts Menu     \n"
 				    + "-----------------------\n"
@@ -125,7 +202,7 @@ public class PhoneList {
 				//if bad input, set input to 0
 				input = 0;  
 			}
-		
+			//check for the input using switch
 			switch (input) {
 			case 1:
 				//handle menu line 1: Add Contact
@@ -154,17 +231,21 @@ public class PhoneList {
 		
 	}
 	
+	//getstring method
 	public String getString(String str) {
-		
+		//create a new scanner
 		Scanner inKey = new Scanner(System.in);
 		System.out.print(str);  //notice it's NOT a print line.  This way input is next to question.
+		//return the new line
 		return inKey.nextLine();
 		
 	}
 	
-	
+	//main method
 	public static void main(String[] args) {
+		//create a new phonelist
 		PhoneList app = new PhoneList();
+		//open the menu
 		app.menu();
 	}
 }
